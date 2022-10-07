@@ -1,19 +1,4 @@
-import { useEffect, useState } from 'react';
-
-export default function Launches() {
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    const fetchLaunches = async () => {
-      const res = await fetch('https://api.spacexdata.com/v3/launches');
-      const data = await res.json();
-
-      setData(data);
-    };
-
-    fetchLaunches();
-  }, []);
-
+export default function Launches({ data }) {
   return data ? (
     <ol>
       {data.map((launch, index) => (
@@ -21,4 +6,13 @@ export default function Launches() {
       ))}
     </ol>
   ) : null;
+}
+
+export async function getServerSideProps() {
+  const res = await fetch('https://api.spacexdata.com/v3/launches');
+  const data = await res.json();
+
+  return {
+    props: { data },
+  };
 }
